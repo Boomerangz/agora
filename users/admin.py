@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from comments.models import CommentMessage
+from .models import User
 
-admin.site.register(CommentMessage)
+admin.site.register(User)
