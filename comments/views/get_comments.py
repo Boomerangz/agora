@@ -29,9 +29,10 @@ class CommentsListView(generics.ListCreateAPIView):
         if self.request.GET.get('flat') == '0':
             id_list = list(queryset.values_list('id', flat=True))
             nested_comments = CommentMessage.objects.\
-                filter(parent_id_list__overlap=id_list). \
-                extra(select={'nested_depth': 'array_length(parent_id_list,1)'}).\
-                order_by('-nested_depth', '-created_at')
+                filter(parent_id_list__overlap=id_list)
             queryset = queryset | nested_comments
+            queryset = queryset.extra(select={'nested_depth': 'coalesce(array_length(parent_id_list,1), 0)'}). \
+                        order_by('nested_depth', '-created_at')
+
 
         return queryset
