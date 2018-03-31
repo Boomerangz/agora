@@ -1,18 +1,25 @@
 import json
+from random import random
 from urllib.parse import urlencode
 
+from datetime import datetime
 from django.test import TestCase
 
 from comments.models import CommentMessage
 from users.models import User
 
+
+def get_random_id():
+    return int(random() * 200000)
+
 class GetCommentsTestCase(TestCase):
 
     def __init__(self, *args, **kwargs):
         super(GetCommentsTestCase, self).__init__(*args, **kwargs)
-        self.comment_depth = 1000
+        self.comment_depth = 100
         self.root_comment_count = 1000
         self.comment_id_list = set()
+        self.user_id = None
 
     def setUp(self):
         user = User.objects.create()
@@ -24,6 +31,8 @@ class GetCommentsTestCase(TestCase):
             child_comment = CommentMessage.objects.create(text="Child comment %d" % (i+1), user=user, parent_id=root_comment.id, parent_type="comment")
             self.comment_id_list.add(child_comment.id)
             root_comment = child_comment
+
+        self.user_id = user.id
 
     def test_receiving_all_comments(self):
         response = self.client.get('/comments/')
@@ -87,5 +96,42 @@ class GetCommentsTestCase(TestCase):
                 response = json.loads(response.content)
             else:
                 break
-
         self.assertEqual(len(self.comment_id_list), 0)
+
+    def test_users_comments(self):
+        response = self.client.get('/comments/users/%d/' % self.user_id)
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(response['count'], self.comment_depth+self.root_comment_count)
+
+    def test_users_comments_with_error(self):
+        while True:
+            non_existing_user_id = get_random_id()
+            if User.objects.filter(pk=non_existing_user_id).count() == 0:
+                break
+        response = self.client.get('/comments/users/%d/' % non_existing_user_id)
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_speed(self):
+        user = User.objects.create()
+        for i in range(10000):
+            CommentMessage.objects.create(text="Test text", user=user, parent_id=5,
+
+                                                         parent_type="article")
+
+        params = {
+            'flat': 0,  # Means we want to receive all comments hierarchy starting from comments for this entity
+            'parent_type': 'article',
+            'parent_id': 5,
+            'page_size': 10000
+        }
+        start = datetime.now()
+        response = self.client.get('/comments/?%s' % urlencode(params))
+        finish = datetime.now()
+        milliseconds = (finish - start).microseconds / 1000
+        self.assertEqual(milliseconds < 1000, True)
+
+
+
+
