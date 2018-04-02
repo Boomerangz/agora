@@ -52,10 +52,10 @@ You can also provide some GET parameters in url:
 **POST** ```http://localhost:8000/comments/``` with body like:
 ```
 {
-	"text": "Some text",
-    "parent_id": 1,
-    "parent_type": "article",
-    "user": 1
+"text": "Some text",
+"parent_id": 1,
+"parent_type": "article",
+"user": 1
 }
 ```
 
@@ -68,10 +68,10 @@ Also you can provide any numeric user ID.
 To update you have to provide with body like:
 ```
 {
-	'text': 'Some text',
-    'parent_id': 1,
-    'parent_type': 'article',
-    'user': 1
+"text": "Some text",
+"parent_id": 1,
+"parent_type": "article",
+"user": 1
 }
 ```
 
