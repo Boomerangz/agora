@@ -38,7 +38,6 @@ class GetCommentsTestCase(TestCase):
         for key, value in test_comment_data.items():
             self.assertEqual(value, getattr(comment_from_db, key))
 
-
     def testAddCommentWithoutData(self):
         test_comment_data = {
             'parent_id': 1,
@@ -46,8 +45,3 @@ class GetCommentsTestCase(TestCase):
         }
         response = self.client.post('/comments/', test_comment_data)
         self.assertEqual(response.status_code, 400)
-
-
-
-
-
