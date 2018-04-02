@@ -10,7 +10,7 @@ PARENT_TYPE_COMMENT = "comment"
 @reversion.register()
 class CommentMessage(models.Model):
     text = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.IntegerField()
     deleted = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)

@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'reversion.middleware.RevisionMiddleware',
+    'reversion.middleware.RevisionMiddleware'
 ]
 
 ROOT_URLCONF = 'agora.urls'
@@ -135,3 +135,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+if 'AGORA_DATABASE_HOST' in os.environ:
+    DATABASES['default']['HOST'] = os.environ['AGORA_DATABASE_HOST']
+
+if 'AGORA_DATABASE_NAME' in os.environ:
+    DATABASES['default']['NAME'] = os.environ['AGORA_DATABASE_NAME']
+
+if 'AGORA_DATABASE_USER' in os.environ:
+    DATABASES['default']['USER'] = os.environ['AGORA_DATABASE_USER']
+
+if 'AGORA_DATABASE_PASSWORD' in os.environ:
+    DATABASES['default']['PASSWORD'] = os.environ['AGORA_DATABASE_PASSWORD']
+
