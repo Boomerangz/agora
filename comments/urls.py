@@ -11,7 +11,7 @@ print(download_comments)
 urlpatterns = [
     url(r'^$', CommentsListView.as_view()),
     path('<int:pk>/', CommentSingleView.as_view()),
-    path('<int:pk>/history', CommentsHistoryListView.as_view()),
+    path('<int:pk>/history/', CommentsHistoryListView.as_view()),
     path('users/<int:pk>/', UsersCommentsListView.as_view(), name='list_view'),
     path('download/comments.<format>', download_comments),
 ]
