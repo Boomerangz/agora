@@ -8,6 +8,5 @@ class CommentSingleView(generics.RetrieveUpdateDestroyAPIView):
     model = CommentMessage
     serializer_class = CommentSerializer
 
-
     def get_queryset(self):
         return self.model.objects.filter(deleted=False)

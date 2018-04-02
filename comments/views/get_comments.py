@@ -21,19 +21,20 @@ class CommentsListView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = self.queryset
 
-        if self.request.GET.get('parent_id') and self.request.GET.get('parent_type'):
+        if self.request.GET.get('parent_id') and \
+                self.request.GET.get('parent_type'):
             parent_id = self.request.GET.get('parent_id')
             parent_type = self.request.GET.get('parent_type')
-            queryset = queryset.filter(parent_id=parent_id, parent_type=parent_type)
+            queryset = queryset.filter(parent_id=parent_id,
+                                       parent_type=parent_type)
 
         if self.request.GET.get('flat') == '0':
             id_list = list(queryset.values_list('id', flat=True))
-            nested_comments = CommentMessage.objects.\
+            nested_comments = CommentMessage.objects. \
                 filter(parent_id_list__overlap=id_list)
             queryset = queryset | nested_comments
-            queryset = queryset.extra(select={'nested_depth': 'coalesce(array_length(parent_id_list,1), 0)'}). \
-                        order_by('nested_depth', '-created_at')
-
+            queryset = queryset.extra(select={
+                'nested_depth': 'coalesce(array_length(parent_id_list,1), 0)'
+            }).order_by('nested_depth', '-created_at')
 
         return queryset
-

@@ -12,13 +12,14 @@ def download_comments(request, format):
         raise Http404
 
 
-
 def xml_serialize(queryset):
     yield '<comments>'
-    output_fields = ['id', 'text', 'created_at', 'updated_at', 'parent_id', 'parent_type', 'user']
+    output_fields = ['id', 'text', 'created_at',
+                     'updated_at', 'parent_id', 'parent_type',
+                     'user']
     for item in queryset.iterator():
         yield '<message>'
-        output_object = {k:getattr(item, k) for k in output_fields}
+        output_object = {k: getattr(item, k) for k in output_fields}
         yield dicttoxml.dicttoxml(output_object, root=False)
         yield '</message>'
     yield '</comments>'

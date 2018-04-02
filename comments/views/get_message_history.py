@@ -18,7 +18,9 @@ class CommentsHistoryListView(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = self.queryset.filter(object_id=self.kwargs['pk'], content_type=ContentType.objects.get(model='commentmessage').id).\
+        queryset = self.queryset.filter(object_id=self.kwargs['pk'],
+                                        content_type=ContentType.objects.get(
+                                            model='commentmessage').id). \
             order_by('-pk')
 
         return queryset

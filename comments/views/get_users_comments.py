@@ -17,6 +17,7 @@ class UsersCommentsListView(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        queryset = self.queryset.filter(user=self.kwargs['pk']).order_by('-created_at')
+        queryset = self.queryset.filter(user=self.kwargs['pk']).order_by(
+            '-created_at')
 
         return queryset
