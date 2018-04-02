@@ -22,7 +22,7 @@ class UsersCommentsListView(generics.ListAPIView):
 
     def get_queryset(self):
         try:
-            user = User.objects.get(pk=self.kwargs['id'])
+            user = User.objects.get(pk=self.kwargs['pk'])
         except ObjectDoesNotExist:
             raise Http404
 

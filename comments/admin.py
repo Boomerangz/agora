@@ -1,5 +1,8 @@
 from django.contrib import admin
+from.models import CommentMessage
+from reversion.admin import VersionAdmin
 
-from comments.models import CommentMessage
+class BaseReversionAdmin(VersionAdmin):
+ pass
 
-admin.site.register(CommentMessage)
+admin.site.register(CommentMessage, BaseReversionAdmin)

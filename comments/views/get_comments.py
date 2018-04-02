@@ -14,7 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 class CommentsListView(generics.ListCreateAPIView):
-    queryset = CommentMessage.objects.all().order_by('-pk')
+    queryset = CommentMessage.objects.filter(deleted=False).order_by('-pk')
     serializer_class = CommentSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -36,3 +36,4 @@ class CommentsListView(generics.ListCreateAPIView):
 
 
         return queryset
+
