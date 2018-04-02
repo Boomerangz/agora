@@ -20,6 +20,11 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
+### Test
+```
+python3 manage.py test
+```
+
 
 ### Configuration
 
