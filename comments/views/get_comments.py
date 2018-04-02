@@ -5,7 +5,6 @@ from rest_framework.pagination import PageNumberPagination
 
 from comments.models import CommentMessage
 from comments.serializers.comment import CommentSerializer
-from users.models import User
 
 
 class StandardResultsSetPagination(PageNumberPagination):

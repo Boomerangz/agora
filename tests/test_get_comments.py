@@ -6,7 +6,6 @@ from datetime import datetime
 from django.test import TestCase
 
 from comments.models import CommentMessage
-from users.models import User
 
 
 def get_random_id():
@@ -22,7 +21,7 @@ class GetCommentsTestCase(TestCase):
         self.user_id = None
 
     def setUp(self):
-        user = User.objects.create()
+        user = get_random_id()
 
         for i in range(self.root_comment_count):
             root_comment = CommentMessage.objects.create(text="Test text %d" % (i+1), user=user, parent_id=1, parent_type="article")
@@ -32,7 +31,7 @@ class GetCommentsTestCase(TestCase):
             self.comment_id_list.add(child_comment.id)
             root_comment = child_comment
 
-        self.user_id = user.id
+        self.user_id = user
 
     def test_receiving_all_comments(self):
         response = self.client.get('/comments/')
@@ -107,14 +106,16 @@ class GetCommentsTestCase(TestCase):
     def test_users_comments_with_error(self):
         while True:
             non_existing_user_id = get_random_id()
-            if User.objects.filter(pk=non_existing_user_id).count() == 0:
+            if CommentMessage.objects.filter(user=non_existing_user_id).count() == 0:
                 break
         response = self.client.get('/comments/users/%d/' % non_existing_user_id)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        response = json.loads(response.content)
+        self.assertEqual(response['count'], 0)
 
 
     def test_speed(self):
-        user = User.objects.create()
+        user = get_random_id()
         for i in range(10000):
             CommentMessage.objects.create(text="Test text", user=user, parent_id=5,
 
