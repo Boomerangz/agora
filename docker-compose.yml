@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "agora"
+      POSTGRES_USER: "agora"
+      POSTGRES_DB: "agora"
+  agora:
+    build: .
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    environment:
+      AGORA_DATABASE_PASSWORD: "agora"
+      AGORA_DATABASE_USER: "agora"
+      AGORA_DATABASE_DB: "agora"
+      AGORA_DATABASE_HOST: "postgres"
+      AGORA_DATABASE_PORT: 5432
+    ports:
+      - "8000:8000"
